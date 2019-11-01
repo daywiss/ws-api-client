@@ -1,10 +1,12 @@
+const assert = require('./assert')
 module.exports = ({keepalive=30000},{ws,connect},emit=x=>x) => {
+  assert(keepalive,'requires keepalive value in ms')
   let cancel
-  async function keepAlive(keepalive){
-    // console.log('keeping connection alive',wait)
+  async function keepAlive(){
+    // console.log('keeping connection alive',keepalive)
     if(ws.readyState === ws.OPEN){
       // console.log('sending data')
-      ws.send('')
+      ws.send('ok')
     }
     if(ws.readyState === ws.CLOSED){
       await connect().then(x=>{
@@ -22,9 +24,9 @@ module.exports = ({keepalive=30000},{ws,connect},emit=x=>x) => {
     pause(){
       return clearTimeout(cancel)
     },
-    resume(wait=keepalive){
+    resume(){
       if(cancel) return
-      return keepAlive(wait)
+      return keepAlive()
     },
   }
 
