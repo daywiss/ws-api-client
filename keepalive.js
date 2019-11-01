@@ -6,7 +6,7 @@ module.exports = ({keepalive=30000},{ws,connect},emit=x=>x) => {
     // console.log('keeping connection alive',keepalive)
     if(ws.readyState === ws.OPEN){
       // console.log('sending data')
-      ws.send('ok')
+      ws.send('')
     }
     if(ws.readyState === ws.CLOSED){
       await connect().then(x=>{
