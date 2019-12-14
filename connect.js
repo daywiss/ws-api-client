@@ -5,7 +5,8 @@ module.exports = (WS,host,emit=x=>x) => async ()=>{
     ws.onopen = event=>{
       if(ws.readyState === ws.OPEN) res() 
     }
-    ws.onerror = e=>rej(new Error(e.message))
+    ws.onerror = e=>rej(e)
+    ws.onclose = e=>rej(e)
   })
 
   ws.onmessage = message=> emit('message',message.data)

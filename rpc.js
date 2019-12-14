@@ -28,9 +28,15 @@ module.exports = (config)=>{
 
   function call(getWs,channel){
     return (action,...args)=>{
-      return new Promise((...promise)=>{
-        pending.set(++id,promise)
-        getWs().send(encode([channel,id,action,args]))
+      // console.log('making call',channel,action,...args)
+      return new Promise((res,rej)=>{
+        pending.set(++id,[res,rej])
+        console.log(encode([channel,id,action,args]))
+        try{
+          getWs().send(encode([channel,id,action,args]))
+        }catch(err){
+          rej(err)
+        }
       })
     }
   }

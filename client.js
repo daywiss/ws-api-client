@@ -49,7 +49,7 @@ module.exports = async (WS,config={},state={},emit=x=>x)=>{
     assert(!result[channel],'Reserved channel name: ' + channel)
     result[channel] = {call:rpc.call(getWs,channel)}
     return result
-  },{rpc,getWs,setState,...keepAlive})
+  },{rpc,getWs,setState,...keepAlive,connect})
 
 
   return client

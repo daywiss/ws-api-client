@@ -41,18 +41,36 @@ exports.getProxy = (obj,path=[],def)=>{
   return curr
 }
 
+exports.touch = (obj,path=[]) => {
+  if(path.length === 0){
+    return {...obj}
+  }
+  const head = path[0]
+
+  if(path.length === 1){
+    return {
+      ...obj,
+      [head]:{...obj[head]}
+    }
+  }
+
+  return exports.touch(copy[head],path.slice(1))
+}
+
 exports.set = (obj,path=[],val)=>{
   if(path.length === 0){
     return val
   }
-  const head = path[0]
   if(path.length === 1){
-    obj[head] = val
+    obj[path[0]] = val
     return obj
   }
-  const rest = path.slice(1)
-  // const [head,...rest] = path
-  obj[head] = Object(obj[head])
+
+  const [head,...rest] = path
+  const child = obj[head]
+  //if child exists, create a new object, otherwise its null and make an object
+  obj[head] = (child != null) ? {...child} : {}
+
   exports.set(obj[head],rest,val)
   return val
 }
@@ -62,26 +80,21 @@ exports.unset = (obj,path=[])=>{
   if(path.length === 0){
     return obj
   }
-  const head = path[0]
+
+  const [head,...rest] = path
 
   if(path.length === 1){
-    if(obj[head] === undefined) return 
     return delete obj[head]
   }
 
-  const rest = path.slice(1)
   return exports.unset(obj[head],rest)
 }
 
 exports.get = (obj,path=[],def)=>{
-  if(obj === undefined) return def
-  if(path.length=== 0){
+  if(obj == null) return def
+  if(path.length === 0){
     return obj
   }
   const [head,...rest] = path
-  if(path.length === 1){
-    if(obj[head] === undefined) return def
-    return obj[head]
-  }
   return exports.get(obj[head],rest,def)
 }

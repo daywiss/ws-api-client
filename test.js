@@ -4,16 +4,8 @@ const proxy = require('./proxy')
 const iter = require('./iterate')
 const lodash = require('lodash')
 
-test('utils',t=>{
+test('bench',t=>{
   const path = ['this','is','a','very','deep','path',0]
-  // t.test('setProxy',t=>{
-  //   const obj = {}
-  //   console.time('setProxy')
-  //   proxy.set(obj,path,'test')
-  //   console.timeEnd('setProxy')
-  //   t.equal(obj.this.is.a.very.deep.path[0],'test')
-  //   t.end()
-  // })
   t.test('setIter',t=>{
     const obj = {}
     console.time('setIter')
@@ -38,6 +30,58 @@ test('utils',t=>{
     t.equal(obj.this.is.a.very.deep.path[0],'test')
     t.end()
   })
+})
+test('utils',t=>{
+  t.test('obj equality',t=>{
+    const a = {test:'test',c:undefined}
+    const b = {...a}
+    const c = Object(a)
+    const d = new Object(a)
+    const e = Object.create(a)
+    // t.ok(a===b)
+    // t.ok(a===e)
+    t.end()
+
+  })
+  t.test('deep path touch',t=>{
+    const path = ['private','me','favorites','0']
+    const value = {url:'github.com'}
+    const obj = {}
+    const pointers = []
+
+    utils.set(obj,path,value)
+
+    let pointer = obj
+
+    path.forEach(key=>{
+      const pt = pointer[key]
+      // console.log('pushing',pt)
+      pointers.push(pt)
+      pointer = pt
+    })
+    
+    utils.set(obj,path,{...value})
+    // console.log({obj,pointers})
+
+    pointer = obj
+    path.forEach((key,i)=>{
+      pointer = pointer[key]
+      // console.log(i,key,pointers[i],pointer)
+      t.notEqual(pointers[i],pointer)
+    })
+
+    t.end()
+
+
+  })
+  // t.test('setProxy',t=>{
+  //   const obj = {}
+  //   console.time('setProxy')
+  //   proxy.set(obj,path,'test')
+  //   console.timeEnd('setProxy')
+  //   t.equal(obj.this.is.a.very.deep.path[0],'test')
+  //   t.end()
+  // })
   // t.test('get',t=>{
   //   console.time('get')
   //   const result = utils.get(obj,path)
