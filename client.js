@@ -23,7 +23,7 @@ module.exports = async (WS,config={},state={},emit=x=>x)=>{
 
     if(event){
       const [channel,updates=[]] = event
-      updates.forEach(data=>{
+      updates.forEach(function setOneState(data){
         setState(channel,data)
       })
       emit('change',channel,state[channel],state)

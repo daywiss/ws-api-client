@@ -1,6 +1,5 @@
-const {set,unset} = require('./utils')
-// const set = require('lodash.setwith')
-// const unset = require('lodash.unset')
+const set = require('@daywiss/utils/set')
+const unset = require('@daywiss/utils/unset')
 module.exports = (state={}) => (channel,[path=[],data]) =>{
   if(path.length){
     if(data === null || data === undefined){
