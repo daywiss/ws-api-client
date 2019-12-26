@@ -1,18 +1,11 @@
-
+const {encode} = require('./utils')
 module.exports = (config)=>{
   const pending = new Map()
   let id = 0
 
-  function decode(data){
-    return JSON.parse(data)
-  }
-  function encode(data){
-    return JSON.stringify(data)
-  }
 
   function response(data){
-    const [channel,id,err,result] = decode(data)
-    if(id == null) return [channel,result]
+    const [channel,id,result,err] = data
     if(!pending.has(id)) return 
     const [res,rej] = pending.get(id)
     if(err){ 

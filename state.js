@@ -1,11 +1,12 @@
 const set = require('@daywiss/utils/set')
 const unset = require('@daywiss/utils/unset')
 module.exports = (state={}) => (channel,[path=[],data]) =>{
+
   if(path.length){
     if(data === null || data === undefined){
-      unset(state,[channel,...path])
+      state[channel] = unset(state[channel],path)
     }else{
-      set(state,[channel,...path],data,Object)
+      state[channel] = set(state[channel],path,data)
     }
   }else{
     state[channel] = data

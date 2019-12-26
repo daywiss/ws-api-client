@@ -3,7 +3,9 @@ const assert = require('assert')
 const Connect = require('./connect')
 const RPC = require('./rpc')
 const KeepAlive = require('./keepalive')
-module.exports = async (WS,config={},state={},emit=x=>x)=>{
+const {decode,encode,isEvent,isRpc} = require('./utils')
+
+module.exports = async (WS,config={},emit=x=>x,state={})=>{
 
   const {host,channels=[]} = config
   assert(host,'requires host')
@@ -14,23 +16,30 @@ module.exports = async (WS,config={},state={},emit=x=>x)=>{
 
   const setState = State(state)
 
-  function handleMessage(type,message){
-    emit(type,message)
+  function handleMessage(type,data){
+    const messages = decode(data) 
 
-    if(type !== 'message') return
+    let change = false
+    messages.forEach(message=>{
+      if(isEvent(message)){
+        change = true
+        setState(message[0],message[2])
+      }else if(isRpc(message)){
+        rpc.response(message)
+      }
+    })
 
-    const event = rpc.response(message)
-
-    if(event){
-      const [channel,updates=[]] = event
-      updates.forEach(function setOneState(data){
-        setState(channel,data)
-      })
-      emit('change',channel,state[channel],state)
-    }
+    if(change) emit('change',state)
   }
 
-  const connect = Connect(WS,host,handleMessage)
+  const connect = Connect(WS,host,(type,data)=>{
+
+    if(type=='message'){
+      handleMessage(type,data)
+    }else{
+      emit(type,data)
+    }
+  })
 
   let ws = await connect()
 
@@ -45,11 +54,15 @@ module.exports = async (WS,config={},state={},emit=x=>x)=>{
 
   keepAlive.resume()
 
+  function close(){
+    keepAlive.pause()
+    ws.close()
+  }
+
   const client = channels.reduce((result,channel)=>{
-    assert(!result[channel],'Reserved channel name: ' + channel)
-    result[channel] = {call:rpc.call(getWs,channel)}
+    result.actions[channel] = rpc.call(getWs,channel)
     return result
-  },{rpc,getWs,setState,...keepAlive,connect})
+  },{actions:{},rpc,getWs,setState,...keepAlive,connect,close})
 
 
   return client
