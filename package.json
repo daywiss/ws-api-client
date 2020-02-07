@@ -4,11 +4,11 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "minimist": "^1.2.0",
+    "ws": "^7.2.1",
     "ynk": "^0.0.1"
   },
   "devDependencies": {
-    "minimist": "^1.2.0",
-    "tape": "^4.11.0",
-    "ws": "^7.2.1"
+    "tape": "^4.11.0"
   }
 }
