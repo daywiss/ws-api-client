@@ -1,14 +1,14 @@
 {
   "name": "ws-api-client",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@daywiss/utils": "https://github.com/daywiss/utils",
-    "minimist": "^1.2.0",
-    "ws": "^7.2.1"
+    "ynk": "^0.0.1"
   },
   "devDependencies": {
-    "tape": "^4.11.0"
+    "minimist": "^1.2.0",
+    "tape": "^4.11.0",
+    "ws": "^7.2.1"
   }
 }

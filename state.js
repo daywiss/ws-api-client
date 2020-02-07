@@ -1,5 +1,4 @@
-const set = require('@daywiss/utils/set')
-const unset = require('@daywiss/utils/unset')
+const {set,unset} = require('ynk')
 module.exports = (state={}) => (channel,[path=[],data]) =>{
 
   if(path.length){
