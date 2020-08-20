@@ -8,15 +8,15 @@ const WS = require('ws')
 
 test('client',t=>{
   let client
-  // t.test('init',async t=>{
-  //   client = await Client(WS).catch(t.end)
-  //   t.ok(client)
-  //   t.end()
-  // })
-  // t.test('close',async t=>{
-  //   await client.close()
-  //   t.end()
-  // })
+  t.test('init',async t=>{
+    client = await Client(WS).catch(t.end)
+    t.ok(client)
+    t.end()
+  })
+  t.test('close',async t=>{
+    await client.close()
+    t.end()
+  })
 })
 
 // test('bench',t=>{
