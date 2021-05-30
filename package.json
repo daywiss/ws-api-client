@@ -5,7 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "minimist": "^1.2.5",
-    "ws": "^7.3.1",
+    "ws": "^7.4.6",
     "ynk": "^0.0.4"
   },
   "devDependencies": {
